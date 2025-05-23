@@ -1,5 +1,6 @@
 package com.example.scheduler.schedule.entity;
 
+import com.example.scheduler.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class) // 작성일, 수정일 자동 기록
-public class Schedule {
+public class Schedule extends BaseEntity { //BaseEntity 상속, createdAt, modifiedAt 필드 포함해줌
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본키 컬럼의 값을 어떻게 자동 생성할지 지정하는 역할
@@ -28,18 +29,27 @@ public class Schedule {
     private String title;
 
     // 일정 내용
-    @Column(nullable = false) // 내용
+    @Column(nullable = false)
     private String contents;
 
-    // 생성일, 생성 시점 자동 기록
-    @CreatedDate
-    private LocalDateTime createdAt;
 
-    // 수정일, 수정 시점 자동 기록
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
+    /**
+     * // 생성일, 생성 시점 자동 기록
+     *
+     * @CreatedDate private LocalDateTime createdAt;
+     * <p>
+     * // 수정일, 수정 시점 자동 기록
+     * @LastModifiedDate private LocalDateTime modifiedAt;
+     * <p>
+     * // 생성자: DTO → Entity 변환 시 사용
+     * public Schedule(String username, String title, String contents) {
+     * this.username = username;
+     * this.title = title;
+     * this.contents = contents;
+     * }
+     */
 
-    // 생성자: DTO → Entity 변환 시 사용
+    // BaseEntity 상속 후 수정완
     public Schedule(String username, String title, String contents) {
         this.username = username;
         this.title = title;
