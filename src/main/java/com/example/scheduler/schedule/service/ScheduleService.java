@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service // 비즈니스 로직 처리 클래스
+@Service
 @RequiredArgsConstructor // final 필드 생성자 자동 생성
 public class ScheduleService {
 

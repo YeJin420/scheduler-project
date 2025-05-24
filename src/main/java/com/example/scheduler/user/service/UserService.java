@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service // 서비스 계층임을 명시
+@Service
 @RequiredArgsConstructor // final 필드인 userRepository를 생성자 주입해줌
 public class UserService {
 

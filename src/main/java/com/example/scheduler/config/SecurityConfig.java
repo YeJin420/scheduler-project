@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration // 이 클래스는 스프링 설정 클래스야!
+@Configuration // 이 클래스는 스프링 설정 클래스
 public class SecurityConfig {
 
     @Bean
