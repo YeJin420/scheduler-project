@@ -11,4 +11,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // 기본적인 CRUD는 JpaRepository가 제공
     // 여기에 username으로 사용자 찾는 커스텀 메서드 추가
     Optional<User> findByUsername(String username);
+    Optional<User> findByEmail(String email); // 이메일 중복 체크를 위해 추가
 }
