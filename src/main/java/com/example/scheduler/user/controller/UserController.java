@@ -20,9 +20,10 @@ public class UserController {
 
     // 회원가입 API - POST/api/users/signup
     @PostMapping("/signup")
-    public UserResponseDto signup(@RequestBody UserRequestDto requestDto) {
+    public ResponseEntity<String> signup(@RequestBody UserRequestDto requestDto) {
+        userService.signup(requestDto);
         // 요청 body(JSON)를 requestDto로 받고, 회원가입 결과 반환
-        return userService.signup(requestDto);
+        return ResponseEntity.ok("회원가입 성공");
     }
 
     // 로그인 API - POST/api/users/login
