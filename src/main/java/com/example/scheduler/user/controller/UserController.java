@@ -6,10 +6,13 @@ import com.example.scheduler.user.service.UserService;
 import com.example.scheduler.user.dto.UserRequestDto;
 import com.example.scheduler.user.dto.UserResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController // REST API의 컨트롤러임을 명시
 @RequiredArgsConstructor // userService 생성자 주입
@@ -28,15 +31,28 @@ public class UserController {
 
     // 로그인 API - POST/api/users/login
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequestDto requestDto, HttpServletRequest request) {
-        try { userService.login(requestDto, request); // 로그인 시도
-            return ResponseEntity.ok("로그인 성공!");
-        } catch (IllegalArgumentException e) {
-            // 예외 발생 시 HTTP 401 Unauthorized 반환, 인증 실패를 명확하게 전달해줌
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        }
-    }
+    public void login(@RequestBody LoginRequestDto requestDto, HttpServletRequest request, HttpServletResponse response)
+            // 이 메서드 안에서 IOException이 발생할 수 있으니 호출한 쪽에서 처리하거나 외부로 던진다
+            // 내가 직접 처리 안할테니 나중에 처리해줘 라는 뜻
+            throws IOException {
+            try {
+                // 로그인 처리
+                userService.login(requestDto, request);
 
+                // 상태 코드 설정 (200 OK)
+                response.setStatus(HttpServletResponse.SC_OK);
+
+                // 응답 메시지 직접 작성
+                response.setContentType("text/plain;charset=UTF-8");
+                response.getWriter().write("로그인 성공!");
+                } catch (IllegalArgumentException e) {
+
+                // 실패한 경우 401 Unauthorized
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("text/plain;charset=UTF-8");
+                response.getWriter().write(e.getMessage());
+            }
+        }
 }
 
 // try-catch 문으로 리팩토링 한 부분

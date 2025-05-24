@@ -85,8 +85,8 @@ public class UserService {
         }
 
         // 로그인 성공하면 세션에 사용자 정보 저장
-        HttpSession session = request.getSession(); // 기존 세션 없으면 새로 만듦
-        session.setAttribute("username", user.getUsername()); // 사용자 이름 저장
+        HttpSession session = request.getSession(); // 각 HTTP 요청에서 주고받는 값들을 담고있음
+        session.setAttribute("username", user.getUsername()); // 사용자 이름 세션에 저장
     }
 }
 
