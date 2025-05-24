@@ -39,6 +39,7 @@ public class UserService {
 
     // 회원가입 기능
     public UserResponseDto signup(UserRequestDto requestDto) {
+
         String username = requestDto.getUsername();
         String password = requestDto.getPassword();
         String email = requestDto.getEmail();
@@ -65,7 +66,8 @@ public class UserService {
 
     // 로그인 기능
     public void login(LoginRequestDto requestDto, HttpServletRequest request) {
-        String email = requestDto.getEmail(); // 4단계 하다보니 이름말고 email이 필요하다고 느낌
+        // 4단계 하다보니 username말고 email이 필요하다고 느낌..ㅎ
+        String email = requestDto.getEmail();
         String password = requestDto.getPassword();
 
         // 입력값이 모두 채워져 있는지 확인(빈 값 방지)
@@ -87,3 +89,47 @@ public class UserService {
         session.setAttribute("username", user.getUsername()); // 사용자 이름 저장
     }
 }
+
+// 아래처럼 리팩토링 해야함. 너무 긴 코드라 유지보수 힘듦
+
+// @Service
+//@RequiredArgsConstructor
+//public class UserService {
+//
+//    private final UserRepository userRepository;
+//
+//    // 회원가입
+//    public UserResponseDto signup(UserRequestDto requestDto) {
+//        // 중복 username 체크
+//        if (userRepository.findByUsername(requestDto.getUsername()).isPresent()) {
+//            throw new IllegalArgumentException("이미 존재하는 사용자 이름입니다.");
+//        }
+//
+//        // 중복 email 체크
+//        if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
+//            throw new IllegalArgumentException("이미 등록된 이메일입니다.");
+//        }
+//
+//        // 유저 저장
+//        User user = new User(requestDto.getUsername(), requestDto.getPassword(), requestDto.getEmail());
+//        userRepository.save(user);
+//
+//        return new UserResponseDto(user);
+//    }
+//
+//    // 로그인
+//    public UserResponseDto login(LoginRequestDto requestDto, HttpServletRequest request) {
+//        // 이메일 존재 여부 확인
+//        User user = userRepository.findByEmail(requestDto.getEmail())
+//                .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 이메일입니다."));
+//
+//        // 비밀번호 확인
+//        if (!user.getPassword().equals(requestDto.getPassword())) {
+//            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+//        }
+//
+//        // 세션에 유저 정보 저장
+//        request.getSession().setAttribute("user", user);
+//        return new UserResponseDto(user);
+//    }
+//}

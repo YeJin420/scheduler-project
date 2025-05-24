@@ -23,7 +23,7 @@ public class UserController {
     public ResponseEntity<String> signup(@RequestBody UserRequestDto requestDto) {
         userService.signup(requestDto);
         // 요청 body(JSON)를 requestDto로 받고, 회원가입 결과 반환
-        return ResponseEntity.ok("회원가입 성공");
+        return ResponseEntity.ok("회원가입 성공!");
     }
 
     // 로그인 API - POST/api/users/login
@@ -37,5 +37,32 @@ public class UserController {
         }
     }
 
-
 }
+
+// try-catch 문으로 리팩토링 한 부분
+//
+// public class UserController {
+//
+//    private final UserService userService;
+//
+//    // 회원가입 API
+//    @PostMapping("/signup")
+//    public ResponseEntity<String> signup(@RequestBody UserRequestDto requestDto) {
+//        try {
+//            userService.signup(requestDto);
+//            return ResponseEntity.ok("회원가입 성공!");
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+//        }
+//    }
+//
+//    // 로그인 API
+//    @PostMapping("/login")
+//    public ResponseEntity<String> login(@RequestBody LoginRequestDto requestDto, HttpServletRequest request) {
+//        try {
+//            userService.login(requestDto, request);
+//            return ResponseEntity.ok("로그인 성공!");
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+//        }
+//    }
