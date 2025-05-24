@@ -5,21 +5,28 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration
+@Configuration // 이 클래스는 스프링 설정 클래스야!
 public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf((csrf) -> csrf.disable()) // ✅ CSRF 보호 끄기 (람다 방식)
-                .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/api/users/**").permitAll()  // 회원가입/로그인 허용
-                        .requestMatchers("/api/schedules/**").permitAll() // (테스트용 허용)
-                        .anyRequest().authenticated() // 나머지는 인증 필요
-                )
-                .formLogin((form) -> form.disable()) // 폼 로그인 비활성화
-                .httpBasic((basic) -> basic.disable()); // HTTP 기본 인증 비활성화
+                // CSRF 보호 기능을 비활성화
+                .csrf((csrf) -> csrf.disable())
 
-        return http.build();
+                // 요청 권한 설정
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/api/users/**").permitAll()       // 회원가입, 로그인은 인증 없이 허용
+                        .requestMatchers("/api/schedules/**").permitAll()   // 일정 API는 임시로 모두 허용 (테스트용)
+                        .anyRequest().authenticated()                       // 그 외 모든 요청은 인증 필요
+                )
+
+                // 로그인 폼 사용 안 함
+                .formLogin((form) -> form.disable())
+
+                // HTTP 기본 인증 비활성화 (브라우저 팝업 로그인 안 쓰기)
+                .httpBasic((basic) -> basic.disable());
+
+        return http.build(); // 최종 SecurityFilterChain 반환
     }
 }
